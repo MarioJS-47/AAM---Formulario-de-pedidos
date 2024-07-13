@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <header>
+
+        </header>
+        <form>
+            <input class="record" id="request_date" name="request_date" type="date">
+            <input class="record" id="voucher" name="voucher" type="number" placeholder="Numero de vale">
+            <input class="record" id="code" name="code" type="text" placeholder="Codigo">
+            <input class="record" id="quantity" name="quantity" type="number" placeholder="Cantidad">
+            <input class="record" id="line" name="line" type="text" placeholder="Linea">
+            <input class="record" id="requester" name="requester" type="text" placeholder="Solicitante">
+            <input class="record" id="authorized" name="authorized" type="text" placeholder="Autorizador">
+            <input class="record" id="buyer" name="buyer" type="text" placeholder="Comprador">
+            <input class="record" id="note" name="note" type="text" placeholder="Nota">
+            <input type="button" onclick="addData()" value="Enviar">
+        </form>
+        
+    </body>
+    <script>
+        function addData() {
+            const request_date = document.getElementById('request_date').value;
+            const voucher = document.getElementById('voucher').value;
+            const code = document.getElementById('code').value;
+            const quantity = document.getElementById('quantity').value;
+            const line = document.getElementById('line').value;
+            const requester = document.getElementById('requester').value;
+            const authorized = document.getElementById('authorized').value;
+            const buyer = document.getElementById('buyer').value;
+            const note = document.getElementById('note').value
+
+
+            const url = "https://maintenance-maintenance-server.turso.io/v2/pipeline";
+            const authToken = "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MjA2OTE2MTAsImlkIjoiZjk1YzJlMDItMTQwZi00MWZiLTgzNzEtODQ0Zjc5ZWYyZmQ2In0.2LvBX9yWMywa9uhaAJW96hNAMuk8CzXHlciNi6ImZhyXp1BGmZfh5gpS08ZhyER4Z2AkvILyEOxeTyiywarxAQ";
+
+            const data = `INSERT INTO pedidos_especiales (voucher, code) VALUES (${voucher}, ${code})`
+
+            fetch(url, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+                "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                requests: [
+                    { type: "execute", stmt: { sql: data } },
+                    { type: "close" },
+                ],
+                })
+            })
+            .then(response => response.json())
+            .then(data => {console.log(data);
+            })
+            .catch(error => { 
+                console.error('Error'. error);
+            });  
+        };
+    </script>
+
+
+</html>
+
+
+
